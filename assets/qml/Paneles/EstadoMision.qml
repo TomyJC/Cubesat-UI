@@ -17,28 +17,16 @@ TarjetaDeDatos {
     property string tiempoMision: "00:00:00"
     property int paquetesRecibidos: 0
 
-    // Colores según estado
-    property color colorEstado: {
-        switch(estado) {
-            case "STANDBY": return "#9E9E9E"
-            case "ASCENSO": return "#2196F3"
-            case "DESCENSO": return "#FF9800"
-            case "ATERRIZAJE": return "#4CAF50"
-            case "ERROR": return "#f44336"
-            default: return "#9E9E9E"
-        }
-    }
-
     contenido: ColumnLayout {
         anchors.fill: parent
         spacing: 12
 
-        // ESTADO PRINCIPAL (Grande y destacado)
+        // Estado principal (grande y destacado)
         Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 60
-            color: colorEstado
-            radius: 8
+            color: Theme.colorEstadoMision(root.estado)
+            radius: Theme.radio
 
             ColumnLayout {
                 anchors.centerIn: parent
@@ -46,16 +34,16 @@ TarjetaDeDatos {
 
                 Text {
                     text: "ESTADO"
-                    font.pixelSize: 10
-                    color: "white"
+                    font.pixelSize: Theme.fuenteSmall
+                    color: Theme.textoBlanco
                     font.bold: true
                     Layout.alignment: Qt.AlignHCenter
                 }
 
                 Text {
-                    text: estado
-                    font.pixelSize: 22
-                    color: "white"
+                    text: root.estado
+                    font.pixelSize: Theme.fuenteH1
+                    color: Theme.textoBlanco
                     font.bold: true
                     Layout.alignment: Qt.AlignHCenter
                 }
@@ -63,14 +51,14 @@ TarjetaDeDatos {
 
             // Animación de pulsación cuando está activo
             SequentialAnimation on opacity {
-                running: estado !== "STANDBY"
+                running: root.estado !== "STANDBY"
                 loops: Animation.Infinite
                 NumberAnimation { to: 0.7; duration: 800 }
                 NumberAnimation { to: 1.0; duration: 800 }
             }
         }
 
-        // INFORMACIÓN DETALLADA
+        // Información detallada
         GridLayout {
             Layout.fillWidth: true
             columns: 2
@@ -82,82 +70,67 @@ TarjetaDeDatos {
                 Layout.fillWidth: true
                 spacing: 8
 
-                Text {
-                    text: "🪂"
-                    font.pixelSize: 16
-                }
+                Text { text: "🪂"; font.pixelSize: 16 }
 
                 ColumnLayout {
                     spacing: 2
-
                     Text {
                         text: "Paracaídas"
-                        font.pixelSize: 9
-                        color: "#666"
+                        font.pixelSize: Theme.fuenteCaption
+                        color: Theme.textoClaro
                     }
-
                     Text {
-                        text: estadoParacaidas
-                        font.pixelSize: 12
+                        text: root.estadoParacaidas
+                        font.pixelSize: Theme.fuenteBody
                         font.bold: true
-                        color: estadoParacaidas === "ABIERTO" ? "#4CAF50" : "#666"
+                        color: root.estadoParacaidas === "ABIERTO" ? Theme.exito : Theme.textoClaro
                     }
                 }
             }
 
-            // Tiempo de Misión
+            // Tiempo de misión
             RowLayout {
                 Layout.fillWidth: true
                 spacing: 8
 
-                Text {
-                    text: "⏱️"
-                    font.pixelSize: 16
-                }
+                Text { text: "⏱️"; font.pixelSize: 16 }
 
                 ColumnLayout {
                     spacing: 2
-
                     Text {
                         text: "Tiempo Misión"
-                        font.pixelSize: 9
-                        color: "#666"
+                        font.pixelSize: Theme.fuenteCaption
+                        color: Theme.textoClaro
                     }
-
                     Text {
-                        text: tiempoMision
-                        font.pixelSize: 12
+                        text: root.tiempoMision
+                        font.pixelSize: Theme.fuenteBody
                         font.bold: true
-                        font.family: "Courier"
+                        font.family: Theme.fuenteMono
                     }
                 }
             }
 
-            // Paquetes Recibidos
+            // Paquetes recibidos
             RowLayout {
                 Layout.fillWidth: true
                 Layout.columnSpan: 2
                 spacing: 8
 
-                Text {
-                    text: "📦"
-                    font.pixelSize: 16
-                }
+                Text { text: "📦"; font.pixelSize: 16 }
 
                 ColumnLayout {
                     spacing: 2
-
                     Text {
                         text: "Paquetes Recibidos"
-                        font.pixelSize: 9
-                        color: "#666"
+                        font.pixelSize: Theme.fuenteCaption
+                        color: Theme.textoClaro
                     }
-
                     Text {
-                        text: paquetesRecibidos.toString()
-                        font.pixelSize: 12
+                        text: root.paquetesRecibidos.toString()
+                        font.pixelSize: Theme.fuenteBody
                         font.bold: true
-                        color: paquetesRecibidos > 0 ? "#4CAF50" : "#666"
+                        color: root.paquetesRecibidos > 0 ? Theme.exito : Theme.textoClaro
                     }
                 }
             }

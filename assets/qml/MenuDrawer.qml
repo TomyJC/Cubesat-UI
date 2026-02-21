@@ -7,86 +7,87 @@ Drawer {
     width: 280
     edge: Qt.LeftEdge
 
-    //SEÑALES
+    // Señales
     signal opcionSeleccionada(string opcion)
 
     Rectangle {
         anchors.fill: parent
-        color: "#f5f5f5"
+        color: Theme.fondoApp
 
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 0
             spacing: 0
 
-            // HEADER DEL DRAWER
+            // Header del drawer
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
-                color: "#2196F3"
+                color: Theme.acento
 
                 ColumnLayout {
                     anchors.centerIn: parent
                     spacing: 5
 
                     Text {
-                        text: "TELSTAR📡"
+                        text: "TELSTAR 📡"
                         font.pixelSize: 20
                         font.bold: true
-                        color: "white"
+                        color: Theme.textoBlanco
                         Layout.alignment: Qt.AlignHCenter
                     }
 
                     Text {
                         text: "GROUND STATION"
                         font.pixelSize: 11
-                        color: "white"
+                        color: Theme.textoBlanco
                         Layout.alignment: Qt.AlignHCenter
                     }
                 }
             }
 
-            // OPCIONES DEL MENÚ
+            // Opciones del menú
             ListView {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 model: menuModel
                 delegate: menuDelegate
+                clip: true
             }
 
-            // FOOTER
+            // Footer
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                color: "#e0e0e0"
+                color: Theme.hoverGris
 
                 Text {
                     anchors.centerIn: parent
-                    text: "©2026 PUCP"
-                    font.pixelSize: 10
-                    color: "#666"
+                    text: "© 2026 PUCP"
+                    font.pixelSize: Theme.fuenteSmall
+                    color: Theme.textoClaro
                 }
             }
         }
     }
 
-    // MODELO DE OPCIONES DEL MENÚ
+    // Modelo de opciones
     ListModel {
         id: menuModel
-        ListElement { nombre: "Telemetria"; icono: "📊" }
-        ListElement { nombre: "Historial"; icono: "💾" }
-        ListElement { nombre: "Configuración"; icono: "⚙" }
-        ListElement { nombre: "Ayuda"; icono: "❓" }
+        ListElement { nombre: "Telemetría"; icono: "📊"; vista: "telemetria" }
+        ListElement { nombre: "Historial";  icono: "💾"; vista: "historial"  }
+        ListElement { nombre: "Configuración"; icono: "⚙"; vista: "configuracion" }
+        ListElement { nombre: "Ayuda";      icono: "❓"; vista: "ayuda"      }
     }
 
-    // DELEGADO PARA CADA ITEM DEL MENÚ
+    // Delegado para cada item
     Component {
         id: menuDelegate
 
         Rectangle {
             width: ListView.view.width
             height: 50
-            color: mouseArea.containsMouse ? "#e3f2fd" : "transparent"
+            color: mouseArea.containsMouse ? Theme.hoverClaro : "transparent"
 
             RowLayout {
                 anchors.fill: parent
@@ -100,8 +101,8 @@ Drawer {
 
                 Text {
                     text: nombre
-                    font.pixelSize: 14
-                    color: "#333"
+                    font.pixelSize: Theme.fuenteH3
+                    color: Theme.textoOscuro
                 }
 
                 Item { Layout.fillWidth: true }
@@ -112,17 +113,17 @@ Drawer {
                 anchors.fill: parent
                 hoverEnabled: true
                 onClicked: {
-                    drawer.opcionSeleccionada(nombre)
+                    drawer.opcionSeleccionada(vista)
                     drawer.close()
                 }
             }
 
-            // LÍNEA SEPARADORA
+            // Línea separadora
             Rectangle {
                 anchors.bottom: parent.bottom
                 width: parent.width
                 height: 1
-                color: "#e0e0e0"
+                color: Theme.bordeSeparador
             }
         }
     }

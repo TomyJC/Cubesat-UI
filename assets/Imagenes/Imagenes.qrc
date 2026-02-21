@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/imagenes">
-        <file>LogoTELSTAR.png</file>
-        <file>SatelitePlaneta.png</file>
-    </qresource>
-</RCC>
