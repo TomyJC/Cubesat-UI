@@ -15,7 +15,7 @@ TarjetaDeDatos {
     property real latitud: 0.0
     property real longitud: 0.0
     property bool datosDisponibles: false
-    property bool camaraGrabando: false
+    property bool camaraGrabando: true
 
     contenido: ColumnLayout {
         anchors.fill: parent
@@ -33,31 +33,46 @@ TarjetaDeDatos {
                 Layout.fillWidth: true
             }
 
-            // Indicador REC
-            Row {
+            // Indicador REC — badge elegante
+            Rectangle {
                 visible: root.camaraGrabando
-                spacing: 4
                 Layout.alignment: Qt.AlignRight
+                width: recRow.implicitWidth + 16
+                height: 24
+                radius: 12
+                color: "white"
+                border.color: "black"
+                border.width: 1
 
-                Rectangle {
-                    width: 10; height: 10; radius: 5
-                    color: Theme.error
-                    anchors.verticalCenter: parent.verticalCenter
+                RowLayout {
+                    id: recRow
+                    anchors.centerIn: parent
+                    spacing: 5
 
-                    SequentialAnimation on opacity {
-                        running: root.camaraGrabando
-                        loops: Animation.Infinite
-                        NumberAnimation { to: 0.2; duration: 500 }
-                        NumberAnimation { to: 1.0; duration: 500 }
+                    Text {
+                        text: "🎥"
+                        font.pixelSize: 12
                     }
-                }
 
-                Text {
-                    text: "REC"
-                    font.pixelSize: Theme.fuenteSmall
-                    font.bold: true
-                    color: Theme.error
-                    anchors.verticalCenter: parent.verticalCenter
+                    Rectangle {
+                        width: 8; height: 8; radius: 4
+                        color: Theme.error
+
+                        SequentialAnimation on opacity {
+                            running: root.camaraGrabando
+                            loops: Animation.Infinite
+                            NumberAnimation { to: 0.2; duration: 500 }
+                            NumberAnimation { to: 1.0; duration: 500 }
+                        }
+                    }
+
+                    Text {
+                        text: "REC"
+                        font.pixelSize: 10
+                        font.bold: true
+                        font.letterSpacing: 1
+                        color: Theme.error
+                    }
                 }
             }
         }

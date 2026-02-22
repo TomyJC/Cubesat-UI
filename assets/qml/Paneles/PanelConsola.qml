@@ -16,6 +16,8 @@ TarjetaDeDatos {
 
     function agregarLog(mensaje) {
         consolaTexto.text += "\n" + mensaje
+        // Auto-scroll al final
+        consolaFlick.contentY = Math.max(0, consolaTexto.contentHeight - consolaFlick.height)
     }
 
     contenido: Rectangle {
@@ -24,19 +26,25 @@ TarjetaDeDatos {
         border.color: Theme.textoClaro
         radius: Theme.radioGrande
 
-        ScrollView {
+        Flickable {
+            id: consolaFlick
             anchors.fill: parent
             anchors.margins: Theme.margenPequeno
+            contentWidth: width
+            contentHeight: consolaTexto.contentHeight
+            clip: true
+            flickableDirection: Flickable.VerticalFlick
 
-            TextArea {
+            TextEdit {
                 id: consolaTexto
+                width: parent.width
                 text: "Log de recepción de Datos:"
                 color: Theme.textoConsola
                 font.family: Theme.fuenteMono
                 font.pixelSize: Theme.fuenteSmall
                 readOnly: true
                 wrapMode: TextEdit.Wrap
-                background: Rectangle { color: "transparent" }
+                selectByMouse: true
             }
         }
     }

@@ -18,7 +18,7 @@ TarjetaDeDatos {
     property int servo: 0
     property string gpsFix: "--"
     property string ccs811Estado: "--"
-
+    property string camaraEstado: "APAGADA"
     property real altitud: 0.0
     property real altitudMaxima: 500.0
     property bool altitudDisponible: false
@@ -29,13 +29,13 @@ TarjetaDeDatos {
 
     contenido: ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 4
-        spacing: 10
+        anchors.margins: 2
+        spacing: 6
 
         // ── Badge de estado ──────────────────────
         Rectangle {
             Layout.fillWidth: true
-            height: 52
+            height: 44
             radius: Theme.radio
             color: Theme.colorEstadoMision(root.estado)
 
@@ -90,7 +90,7 @@ TarjetaDeDatos {
         GridLayout {
             Layout.fillWidth: true
             columns: 2
-            rowSpacing: 6
+            rowSpacing: 4
             columnSpacing: 8
 
             // ── Paracaídas ──
@@ -146,6 +146,32 @@ TarjetaDeDatos {
                 Layout.alignment: Qt.AlignRight
             }
 
+            // ── Cámara ──
+            Text { text: "📷  Cámara"; font.pixelSize: Theme.fuenteSmall; color: Theme.textoClaro; Layout.fillWidth: true }
+            Row {
+                Layout.alignment: Qt.AlignRight
+                spacing: 5
+
+                Rectangle {
+                    visible: root.camaraEstado === "GRABANDO"
+                    width: 7; height: 7; radius: 3.5
+                    color: Theme.error
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    SequentialAnimation on opacity {
+                        running: root.camaraEstado === "GRABANDO"
+                        loops: Animation.Infinite
+                        NumberAnimation { to: 0.2; duration: 500 }
+                        NumberAnimation { to: 1.0; duration: 500 }
+                    }
+                }
+
+                Text {
+                    text: root.camaraEstado
+                    font.pixelSize: Theme.fuenteSmall; font.bold: true
+                    color: root.camaraEstado === "GRABANDO" ? Theme.exito : Theme.textoClaro
+                }
+            }
 
         }
 
@@ -171,7 +197,7 @@ TarjetaDeDatos {
 
                 Text {
                     text: root.altitudDisponible ? root.altitud.toFixed(1) : "--"
-                    font.pixelSize: 34
+                    font.pixelSize: 28
                     font.bold: true
                     font.family: Theme.fuenteMono
                     color: Theme.textoOscuro
