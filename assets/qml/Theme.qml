@@ -8,6 +8,9 @@ QtObject {
     readonly property color fondoTarjeta: "white"
     readonly property color fondoPlaceholder: "#f5f5f5"
     readonly property color fondoConsola: "#1e1e1e"
+    readonly property color fondoOscuro: "#0f1923"
+    readonly property color superficieOscura: "#162230"
+    readonly property color acentoCyan: "#00e5ff"
 
     // Bordes
     readonly property color bordeOscuro: "#333333"

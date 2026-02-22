@@ -9,6 +9,7 @@ TarjetaDeDatos {
     Layout.fillWidth: true
     Layout.preferredHeight: 320
     titulo: "ORIENTACIÓN"
+    icono: "🧭"
 
     // Propiedades de datos (listas para backend)
     property real pitch: 0.0

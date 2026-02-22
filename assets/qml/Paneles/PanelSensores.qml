@@ -8,6 +8,7 @@ TarjetaDeDatos {
     Layout.fillWidth: true
     Layout.preferredHeight: 180
     titulo: "SENSORES AMBIENTALES"
+    icono: "🌡️"
 
     // Propiedades de datos (listas para backend)
     property real tempInterna: -999
@@ -56,28 +57,6 @@ TarjetaDeDatos {
             Item { Layout.fillHeight: true }
         }
 
-        // Sensor extra
-        ColumnLayout {
-            Layout.fillWidth: true
 
-            Item { Layout.fillHeight: true }
-
-            Text {
-                text: "SENSOR EXTRA"
-                font.pixelSize: Theme.fuenteBody
-                font.bold: true
-                horizontalAlignment: Text.AlignHCenter
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            Text {
-                text: root.sensorExtra
-                font.pixelSize: 24
-                font.bold: true
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            Item { Layout.fillHeight: true }
-        }
     }
 }

@@ -8,6 +8,7 @@ TarjetaDeDatos {
     Layout.fillWidth: true
     Layout.fillHeight: true
     titulo: "VELOCIDAD DE DESCENSO"
+    icono: "⬇️"
 
     // Propiedades de datos (listas para backend)
     property real velocidad: 0.0

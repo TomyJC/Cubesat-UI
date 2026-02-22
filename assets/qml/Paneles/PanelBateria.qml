@@ -6,8 +6,9 @@ TarjetaDeDatos {
     id: root
 
     Layout.fillWidth: true
-    Layout.fillHeight: true
+    Layout.preferredHeight: 160
     titulo: "BATERÍA / CONECTIVIDAD"
+    icono: "🔋"
 
     // Propiedades de datos (listas para backend)
     property real voltaje: -1

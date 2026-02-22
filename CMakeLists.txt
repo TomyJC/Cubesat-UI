@@ -4,7 +4,7 @@ project(TELSTAR_OFFICIAL VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -33,7 +33,7 @@ qt_add_qml_module(appTELSTAR_OFFICIAL
         assets/qml/Componentes/PlaceholderPanel.qml
 
         # Paneles de datos
-        assets/qml/Paneles/EstadoMision.qml
+        assets/qml/Paneles/PanelEstadoMision.qml
         assets/qml/Paneles/PanelAltitud.qml
         assets/qml/Paneles/PanelBateria.qml
         assets/qml/Paneles/PanelGeolocalizacion.qml
@@ -59,7 +59,7 @@ set_target_properties(appTELSTAR_OFFICIAL PROPERTIES
 )
 
 target_link_libraries(appTELSTAR_OFFICIAL
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Quick Qt6::QuickControls2
 )
 
 include(GNUInstallDirs)

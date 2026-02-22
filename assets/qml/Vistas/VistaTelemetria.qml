@@ -6,100 +6,111 @@ import "../Paneles"
 Item {
     id: root
 
-    // Propiedades de misión (vinculadas desde Main)
-    property string estadoMision: "STANDBY"
-    property string estadoParacaidas: "CERRADO"
-    property string tiempoMision: "00:00:00"
-    property int paquetesRecibidos: 0
-    property bool estaConectado: false
-    property int segundosTranscurridos: 0
+    property string estadoMision:       "STANDBY"
+    property string estadoParacaidas:   "CERRADO"
+    property string tiempoMision:       "00:00:00"
+    property int    paquetesRecibidos:  0
+    property bool   estaConectado:      false
+    property int    segundosTranscurridos: 0
 
-    // Acceso público a sub-componentes
     property alias panelEstadoMision: _panelEstadoMision
-    property alias panelConsola: _panelConsola
+    property alias panelConsola:      _panelConsola
 
-    GridLayout {
-        anchors.fill: parent
+    ColumnLayout {
+        anchors.fill:    parent
         anchors.margins: Theme.margenPequeno
+        spacing:         Theme.espaciado
 
-        columns: 3
-        rowSpacing: Theme.espaciado
-        columnSpacing: Theme.espaciado
-
-        // =================== COLUMNA 1 (Izquierda - 20%) ===================
-        ColumnLayout {
+        // ═══════════════════════════════════════════
+        //  FILA SUPERIOR  (70 %)
+        // ═══════════════════════════════════════════
+        RowLayout {
+            Layout.fillWidth:  true
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.20
-            Layout.minimumWidth: 220
+            Layout.verticalStretchFactor: 7
             spacing: Theme.espaciado
 
-            EstadoMision {
-                id: _panelEstadoMision
-                Layout.fillWidth: true
-                estado: root.estadoMision
-                estadoParacaidas: root.estadoParacaidas
-                tiempoMision: root.tiempoMision
-                paquetesRecibidos: root.paquetesRecibidos
+            // ── COLUMNA IZQUIERDA ────────────
+            ColumnLayout {
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 2
+                Layout.minimumWidth:           220
+                spacing:                       Theme.espaciado
+
+                EstadoMision {
+                    id:                   _panelEstadoMision
+                    Layout.fillWidth:     true
+                    Layout.fillHeight:    true
+                    Layout.verticalStretchFactor: 2
+                    estado:               root.estadoMision
+                    estadoParacaidas:     root.estadoParacaidas
+                    tiempoMision:         root.tiempoMision
+                    paquetesRecibidos:    root.paquetesRecibidos
+                }
+
+                PanelBateria {
+                    Layout.fillWidth:     true
+                    Layout.fillHeight:    true
+                    Layout.verticalStretchFactor: 1
+                }
             }
 
-            PanelAltitud {
-                Layout.fillWidth: true
-            }
+            // ── COLUMNA CENTRAL ──────────────
+            ColumnLayout {
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 5
+                Layout.minimumWidth:           500
+                spacing:                       Theme.espaciado
 
-            PanelBateria {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-        }
-
-        // =================== COLUMNA 2 (Centro - 55%) ===================
-        ColumnLayout {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.55
-            Layout.minimumWidth: 500
-            spacing: Theme.espaciado
-
-            PanelGeolocalizacion {
-                Layout.fillWidth: true
-            }
-
-            PanelSensores {
-                Layout.fillWidth: true
-            }
-
-            // Acelerómetro + Velocidad (fila)
-            RowLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                spacing: Theme.espaciado
-
-                PanelAcelerometro {
-                    Layout.fillWidth: true
+                PanelGeolocalizacion {
+                    Layout.fillWidth:  true
                     Layout.fillHeight: true
                 }
 
-                PanelVelocidad {
-                    Layout.fillWidth: true
+                PanelSensores {
+                    Layout.fillWidth:  true
                     Layout.fillHeight: true
                 }
             }
-        }
 
-        // =================== COLUMNA 3 (Derecha - 20%) ===================
-        ColumnLayout {
-            Layout.fillHeight: true
-            Layout.preferredWidth: parent.width * 0.20
-            Layout.minimumWidth: 220
-            spacing: Theme.espaciado
-
+            // ── COLUMNA DERECHA ──────────────
             PanelOrientacion {
-                Layout.fillWidth: true
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 2
+                Layout.minimumWidth:           200
+            }
+        }
+
+        // ═══════════════════════════════════════════
+        //  FILA INFERIOR  (30 %)
+        //  Acelerómetro │ Velocidad │ Consola
+        // ═══════════════════════════════════════════
+        RowLayout {
+            Layout.fillWidth:  true
+            Layout.fillHeight: true
+            Layout.verticalStretchFactor: 3
+            spacing: Theme.espaciado
+
+            PanelAcelerometro {
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 3
+            }
+
+            PanelVelocidad {
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 3
             }
 
             PanelConsola {
-                id: _panelConsola
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                id:                            _panelConsola
+                Layout.fillHeight:             true
+                Layout.fillWidth:              true
+                Layout.horizontalStretchFactor: 4
             }
         }
     }

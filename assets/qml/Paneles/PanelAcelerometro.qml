@@ -8,6 +8,7 @@ TarjetaDeDatos {
     Layout.fillWidth: true
     Layout.fillHeight: true
     titulo: "ACELERÓMETRO"
+    icono: "📐"
 
     // Propiedades de datos (listas para backend)
     property real accelX: 0.0

@@ -9,6 +9,7 @@ TarjetaDeDatos {
     Layout.fillWidth: true
     Layout.fillHeight: true
     titulo: "CONSOLA DE SALIDA"
+    icono: "💻"
 
     // API pública
     property alias textoConsola: consolaTexto.text
