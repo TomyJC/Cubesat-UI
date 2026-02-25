@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import "Vistas"
+import "Layout"
 
 ApplicationWindow {
     id: mainWindow

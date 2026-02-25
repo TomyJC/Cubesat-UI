@@ -24,8 +24,8 @@ qt_add_qml_module(appTELSTAR_OFFICIAL
         # Raíz
         assets/qml/Main.qml
         assets/qml/Theme.qml
-        assets/qml/Encabezado.qml
-        assets/qml/MenuDrawer.qml
+        assets/qml/Layout/Encabezado.qml
+        assets/qml/Layout/MenuDrawer.qml
 
         # Componentes reutilizables
         assets/qml/Componentes/TarjetaDeDatos.qml
@@ -34,7 +34,7 @@ qt_add_qml_module(appTELSTAR_OFFICIAL
 
         # Paneles de datos
         assets/qml/Paneles/PanelEstadoMision.qml
-        assets/qml/Paneles/PanelAltitud.qml
+
         assets/qml/Paneles/PanelBateria.qml
         assets/qml/Paneles/PanelGeolocalizacion.qml
         assets/qml/Paneles/PanelSensores.qml

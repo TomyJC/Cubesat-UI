@@ -6,7 +6,7 @@ TarjetaDeDatos {
     id: root
 
     Layout.fillWidth: true
-    Layout.preferredHeight: 160
+    Layout.fillHeight: true
     titulo: "BATERÍA / CONECTIVIDAD"
     icono: "🔋"
 

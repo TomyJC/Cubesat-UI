@@ -7,7 +7,7 @@ TarjetaDeDatos {
     id: root
 
     Layout.fillWidth: true
-    Layout.preferredHeight: 280
+    Layout.fillHeight: true
     titulo: "GEOLOCALIZACIÓN"
     icono: "🌍"
 
@@ -15,7 +15,7 @@ TarjetaDeDatos {
     property real latitud: 0.0
     property real longitud: 0.0
     property bool datosDisponibles: false
-    property bool camaraGrabando: true
+    property bool camaraGrabando: false
 
     contenido: ColumnLayout {
         anchors.fill: parent

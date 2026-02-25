@@ -6,7 +6,7 @@ TarjetaDeDatos {
     id: root
 
     Layout.fillWidth: true
-    Layout.preferredHeight: 180
+    Layout.fillHeight: true
     titulo: "SENSORES AMBIENTALES"
     icono: "🌡️"
 

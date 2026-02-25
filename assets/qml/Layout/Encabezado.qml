@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "Componentes"
+import "../Componentes"
 
 Rectangle {
     id: root
@@ -99,7 +99,7 @@ Rectangle {
         // Logo de la misión
         Image {
             id: missionLogo
-            source: "../Imagenes/SatelitePlaneta.png"
+            source: "../../Imagenes/SatelitePlaneta.png"
             fillMode: Image.PreserveAspectFit
             smooth: true
             sourceSize.height: 65

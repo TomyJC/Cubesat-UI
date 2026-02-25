@@ -7,7 +7,7 @@ TarjetaDeDatos {
     id: root
 
     Layout.fillWidth: true
-    Layout.preferredHeight: 320
+    Layout.fillHeight: true
     titulo: "ORIENTACIÓN"
     icono: "🧭"
 
