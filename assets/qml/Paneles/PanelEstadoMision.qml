@@ -17,7 +17,7 @@ TarjetaDeDatos {
     property int paquetesRecibidos: 0
     property int servo: 0
     property string gpsFix: "--"
-    property string ccs811Estado: "--"
+    property string ens160Estado: "--"
     property string camaraEstado: "APAGADA"
     property real altitud: 0.0
     property real altitudMaxima: 500.0
@@ -137,12 +137,12 @@ TarjetaDeDatos {
                 Layout.alignment: Qt.AlignRight
             }
 
-            // ── CCS811 ──
-            Text { text: "🌫  CCS811"; font.pixelSize: Theme.fuenteSmall; color: Theme.textoClaro; Layout.fillWidth: true }
+            // ── ENS160 ──
+            Text { text: "🌫  ENS160"; font.pixelSize: Theme.fuenteSmall; color: Theme.textoClaro; Layout.fillWidth: true }
             Text {
-                text: root.ccs811Estado
+                text: root.ens160Estado
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
-                color: root.ccs811Estado === "LISTO" ? Theme.exito : Theme.textoClaro
+                color: root.ens160Estado === "LISTO" ? Theme.exito : Theme.textoClaro
                 Layout.alignment: Qt.AlignRight
             }
 

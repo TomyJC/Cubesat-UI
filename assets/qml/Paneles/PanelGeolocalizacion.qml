@@ -15,7 +15,7 @@ TarjetaDeDatos {
     property real latitud: 0.0
     property real longitud: 0.0
     property bool datosDisponibles: false
-    property bool camaraGrabando: false
+    property bool camaraGrabando: true
 
     contenido: ColumnLayout {
         anchors.fill: parent
