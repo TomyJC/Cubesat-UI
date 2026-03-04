@@ -13,6 +13,14 @@ ApplicationWindow {
     color: Theme.fondoApp
     title: "TELSTAR — Ground Station"
 
+    // ===== Mensaje de inicio =====
+    Component.onCompleted: {
+        vistaTelemetria.panelConsola.agregarLog("========================================")
+        vistaTelemetria.panelConsola.agregarLog("  TELSTAR — ESTACIÓN TERRENA INICIADA")
+        vistaTelemetria.panelConsola.agregarLog("========================================")
+        vistaTelemetria.panelConsola.agregarLog("Esperando conexión...")
+    }
+
     // ===== Menú lateral =====
     MenuDrawer {
         id: menuDrawer
@@ -47,10 +55,11 @@ ApplicationWindow {
 
                 if (conectado) {
                     if (encabezado.esSimulacion) {
-                        // Modo simulación: generar datos falsos
                         simulador.iniciar()
                     } else {
-                        // Modo real: conectar al puerto serial
+                        vistaTelemetria.panelConsola.agregarLog(
+                            "[SERIAL] Conectando a " + encabezado.puertoSeleccionado +
+                            " @ " + encabezado.baudrateSeleccionado + " baud...")
                         serialManager.conectar(encabezado.puertoSeleccionado,
                                                parseInt(encabezado.baudrateSeleccionado))
                     }
@@ -59,10 +68,12 @@ ApplicationWindow {
                     if (encabezado.esSimulacion) {
                         simulador.detener()
                     } else {
+                        vistaTelemetria.panelConsola.agregarLog("[SERIAL] Desconectado")
                         serialManager.desconectar()
                     }
                     csvWriter.finalizarSesion()
                     telemetry.resetear()
+                    vistaTelemetria.panelConsola.agregarLog("Esperando conexión...")
                 }
             }
 

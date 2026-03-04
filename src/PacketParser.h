@@ -23,7 +23,7 @@ private:
     QByteArray m_buffer;
 
     bool buscarFrame();
-    static uint16_t calcularCRC16(const uint8_t *data, int length);
+    static uint16_t calcularChecksum(const uint8_t *data, int length);
 };
 
 #endif // PACKETPARSER_H

@@ -36,6 +36,7 @@ signals:
     // Misma señal que emite PacketParser — así se conecta igual
     void paqueteValido(TelemetryPacket pkt, int16_t rssi, float snr);
     void activoCambiado();
+    void logAgregado(const QString &tipo, const QString &mensaje);
 
 private slots:
     void generarPaquete();
@@ -54,6 +55,9 @@ private:
 
     // Genera un valor float con algo de ruido aleatorio
     float conRuido(float valor, float ruido);
+
+    // Estado anterior (para detectar cambios y emitir logs)
+    uint8_t m_estadoAnterior = 255;
 };
 
 #endif // DATASIMULATOR_H

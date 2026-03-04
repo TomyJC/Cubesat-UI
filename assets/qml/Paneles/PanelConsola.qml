@@ -38,7 +38,7 @@ TarjetaDeDatos {
             TextEdit {
                 id: consolaTexto
                 width: parent.width
-                text: "Log de recepción de Datos:"
+                text: ""
                 color: Theme.textoConsola
                 font.family: Theme.fuenteMono
                 font.pixelSize: Theme.fuenteSmall

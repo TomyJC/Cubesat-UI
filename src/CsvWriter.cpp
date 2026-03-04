@@ -88,7 +88,7 @@ void CsvWriter::escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr)
              << pkt.camSt << ","
              << QString::number(pkt.volt, 'f', 3) << ","
              << QString::number(pkt.cpuT, 'f', 1) << ","
-             << pkt.crc16 << ","
+             << pkt.checksum << ","
              << rssi << ","
              << QString::number(snr, 'f', 2) << ","
              // Campos calculados (vacíos por ahora, se pueden agregar)
@@ -114,7 +114,7 @@ void CsvWriter::escribirEncabezado()
              << "GYRO_X,GYRO_Y,GYRO_Z,"
              << "MAG_X,MAG_Y,MAG_Z,"
              << "PARA,SERVO,CAM_ST,"
-             << "VOLT,CPU_T,CRC16,"
+             << "VOLT,CPU_T,CHECKSUM,"
              << "RSSI,SNR,"
              << "V_DESC,PITCH,ROLL,YAW,ESTADO_STR"
              << "\n";

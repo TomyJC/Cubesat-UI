@@ -53,8 +53,8 @@ struct TelemetryPacket {
     float    volt;          // Voltaje batería (V)
     float    cpuT;          // Temperatura CPU ESP32 (°C)
 
-    // Bytes [96..97] — CRC-16 (little-endian, sobre bytes [1..95])
-    uint16_t crc16;
+    // Bytes [96..97] — Checksum (suma de bytes [1..95], little-endian)
+    uint16_t checksum;
 
     // Byte [98] — End of Frame
     uint8_t  eof;           // 0x55

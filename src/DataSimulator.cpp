@@ -28,9 +28,11 @@ void DataSimulator::iniciar()
     m_altitud = 0.0f;
     m_paraAbierto = false;
 
+    m_estadoAnterior = 255;
     m_activo = true;
     m_timer.start();
     emit activoCambiado();
+    emit logAgregado("SYS", "[SIMULADOR] Simulación de misión iniciada");
 }
 
 // =============================================================================
@@ -41,6 +43,7 @@ void DataSimulator::detener()
     m_timer.stop();
     m_activo = false;
     emit activoCambiado();
+    emit logAgregado("SYS", "[SIMULADOR] Simulación detenida");
 }
 
 // =============================================================================
@@ -121,6 +124,17 @@ void DataSimulator::generarPaquete()
     }
 
     pkt.estado = m_estado;
+
+    // Emitir log cuando cambia el estado de misión
+    if (m_estado != m_estadoAnterior) {
+        switch (m_estado) {
+        case 0: emit logAgregado("SYS", "[MISIÓN] Estado: STANDBY — Esperando lanzamiento"); break;
+        case 1: emit logAgregado("SYS", "[MISIÓN] Estado: ASCENSO — Lanzamiento detectado"); break;
+        case 2: emit logAgregado("SYS", "[MISIÓN] Estado: DESCENSO — Apogeo alcanzado, paracaídas abierto"); break;
+        case 3: emit logAgregado("SYS", "[MISIÓN] Estado: ATERRIZAJE — CanSat en tierra"); break;
+        }
+        m_estadoAnterior = m_estado;
+    }
 
     // =========================================================================
     // DATOS DE SENSORES SIMULADOS
@@ -204,8 +218,8 @@ void DataSimulator::generarPaquete()
     // --- Temperatura CPU ---
     pkt.cpuT = conRuido(45.0f, 1.0f);
 
-    // --- CRC (no importa para simulación, pero lo llenamos) ---
-    pkt.crc16 = 0;
+    // --- Checksum (no importa para simulación, pero lo llenamos) ---
+    pkt.checksum = 0;
 
     // =========================================================================
     // Emitir el paquete (como si viniera de PacketParser)

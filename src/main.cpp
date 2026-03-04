@@ -40,6 +40,10 @@ int main(int argc, char *argv[])
     QObject::connect(&simulador, &DataSimulator::paqueteValido,
                      &telemetry, &TelemetryData::onPaqueteValido);
 
+    // DataSimulator::logAgregado → TelemetryData (para mostrar en consola)
+    QObject::connect(&simulador, &DataSimulator::logAgregado,
+                     &telemetry, &TelemetryData::logAgregado);
+
     // Expose to QML
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("serialManager", &serialManager);

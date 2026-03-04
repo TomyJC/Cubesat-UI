@@ -28,18 +28,19 @@ PacketParser::paqueteValido   → TelemetryData::onPaqueteValido
 PacketParser::paqueteValido   → CsvWriter::escribirPaquete
 PacketParser::paqueteInvalido → TelemetryData::onPaqueteInvalido
 ```
-Objects exposed to QML as context properties: `serialManager`, `telemetry`, `csvWriter`.
+Objects exposed to QML as context properties: `serialManager`, `telemetry`, `csvWriter`, `simulador`.
 
 ### Backend (src/)
 | Class | Role |
 |-------|------|
 | `TelemetryPacket.h` | `#pragma pack(push,1)` structs: `TelemetryPacket` (99B), `SerialFrame` (105B) with static_assert |
 | `SerialManager` | QSerialPort wrapper, port scanning every 2s, Q_INVOKABLE `conectar`/`desconectar` |
-| `PacketParser` | Accumulates bytes in buffer, validates SOF/EOF/CRC-16 (CCITT-FALSE), emits valid/invalid |
+| `PacketParser` | Accumulates bytes in buffer, validates SOF/EOF/checksum (suma), emits valid/invalid |
 | `TelemetryData` | Central model: ~44 Q_PROPERTYs (all emit single `datosActualizados` signal), owns `VDescCalculator` + `MadgwickFilter` |
 | `VDescCalculator` | ΔALT/ΔT_MIS → m/s descent velocity |
 | `MadgwickFilter` | AHRS quaternion filter (9DOF with mag, falls back to 6DOF), outputs pitch/roll/yaw in degrees |
 | `CsvWriter` | Writes 40-column CSV with T_RX timestamp per session |
+| `DataSimulator` | Generates fake telemetry (full mission simulation) at 3 Hz for UI testing |
 
 ### Frontend (assets/qml/)
 - QML Module URI: `TELSTAR_OFFICIAL` (registered in CMakeLists.txt)
@@ -50,7 +51,7 @@ Objects exposed to QML as context properties: `serialManager`, `telemetry`, `csv
 
 ### Telemetry protocol (99 bytes)
 ```
-[0]=SOF(0xAA) [1..95]=Payload(34 fields) [96..97]=CRC-16 LE [98]=EOF(0x55)
+[0]=SOF(0xAA) [1..95]=Payload(34 fields) [96..97]=Checksum(suma) LE [98]=EOF(0x55)
 ```
 Serial frame adds 6 bytes after EOF: RSSI(int16) + SNR(float) = 105 bytes total.
 Full protocol spec: `TELSTAR_documentacion.md`
@@ -60,7 +61,7 @@ Full protocol spec: `TELSTAR_documentacion.md`
 - Units: ACC in **g** (not m/s²), GYRO in °/s, MAG in µT
 - T_MIS = milliseconds since ESP32 boot; used for dt calculations (Madgwick, V_DESC)
 - Mission states: 0=STANDBY, 1=ASCENSO, 2=DESCENSO, 3=ATERRIZAJE
-- Fields without a physical sensor (corriente, cpuLoad) return -1
+- Checksum = suma simple de bytes del payload (uint16_t, mod 65536)
 
 ## Rules
 - **No git push** without explicit authorization

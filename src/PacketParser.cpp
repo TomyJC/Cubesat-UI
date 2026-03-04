@@ -58,12 +58,12 @@ bool PacketParser::buscarFrame()
             continue;
         }
 
-        // Validar CRC-16 sobre payload [1..99]
-        uint16_t crcCalculado = calcularCRC16(raw + PAYLOAD_START, PAYLOAD_END);
-        uint16_t crcRecibido;
-        std::memcpy(&crcRecibido, raw + CRC_OFFSET, sizeof(uint16_t));
+        // Validar checksum sobre payload [1..95]
+        uint16_t checksumCalculado = calcularChecksum(raw + PAYLOAD_START, PAYLOAD_END);
+        uint16_t checksumRecibido;
+        std::memcpy(&checksumRecibido, raw + CRC_OFFSET, sizeof(uint16_t));
 
-        if (crcCalculado != crcRecibido) {
+        if (checksumCalculado != checksumRecibido) {
             emit paqueteInvalido(1);
             m_buffer.remove(0, 1);
             continue;
@@ -88,20 +88,11 @@ bool PacketParser::buscarFrame()
     return false;
 }
 
-// CRC-16 CCITT-FALSE (polinomio 0x1021, init 0xFFFF)
-uint16_t PacketParser::calcularCRC16(const uint8_t *data, int length)
+// Checksum: suma simple de todos los bytes del payload
+uint16_t PacketParser::calcularChecksum(const uint8_t *data, int length)
 {
-    uint16_t crc = 0xFFFF;
-
-    for (int i = 0; i < length; ++i) {
-        crc ^= static_cast<uint16_t>(data[i]) << 8;
-        for (int j = 0; j < 8; ++j) {
-            if (crc & 0x8000)
-                crc = (crc << 1) ^ 0x1021;
-            else
-                crc <<= 1;
-        }
-    }
-
-    return crc;
+    uint16_t suma = 0;
+    for (int i = 0; i < length; ++i)
+        suma += data[i];
+    return suma;
 }
