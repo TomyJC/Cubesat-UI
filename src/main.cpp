@@ -36,6 +36,11 @@ int main(int argc, char *argv[])
     QObject::connect(&packetParser, &PacketParser::paqueteValido,
                      &csvWriter, &CsvWriter::escribirPaquete);
 
+    // PacketParser::paqueteValido → SerialManager::confirmarConexion
+    // (Transiciona de CONECTANDO a CONECTADO al recibir primer paquete válido)
+    QObject::connect(&packetParser, &PacketParser::paqueteValido,
+                     &serialManager, &SerialManager::confirmarConexion);
+
     // DataSimulator::paqueteValido → TelemetryData (misma señal que PacketParser)
     QObject::connect(&simulador, &DataSimulator::paqueteValido,
                      &telemetry, &TelemetryData::onPaqueteValido);

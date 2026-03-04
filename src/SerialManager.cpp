@@ -14,6 +14,11 @@ SerialManager::SerialManager(QObject *parent)
     m_scanTimer.setInterval(2000);
     m_scanTimer.start();
 
+    // Timer de timeout: si no llega paquete válido, desconectar
+    m_timeoutTimer.setSingleShot(true);
+    connect(&m_timeoutTimer, &QTimer::timeout,
+            this, &SerialManager::onTimeoutConexion);
+
     // Escaneo inicial
     escanearPuertos();
 }
@@ -23,14 +28,20 @@ QStringList SerialManager::puertosDisponibles() const
     return m_puertos;
 }
 
+int SerialManager::estadoConexion() const
+{
+    return static_cast<int>(m_estado);
+}
+
 bool SerialManager::conectado() const
 {
-    return m_conectado;
+    return m_estado == Conectado;
 }
 
 bool SerialManager::conectar(const QString &puerto, int baudrate)
 {
-    if (m_conectado)
+    // Si ya estaba conectado/conectando, desconectar primero
+    if (m_estado != Desconectado)
         desconectar();
 
     m_serial.setPortName(puerto);
@@ -45,17 +56,21 @@ bool SerialManager::conectar(const QString &puerto, int baudrate)
         return false;
     }
 
-    setConectado(true);
+    // Puerto abierto → estado CONECTANDO, esperando primer paquete válido
+    setEstado(Conectando);
     m_scanTimer.stop();
+    m_timeoutTimer.start(TIMEOUT_CONEXION_MS);
     return true;
 }
 
 void SerialManager::desconectar()
 {
+    m_timeoutTimer.stop();
+
     if (m_serial.isOpen())
         m_serial.close();
 
-    setConectado(false);
+    setEstado(Desconectado);
     m_scanTimer.start();
 }
 
@@ -70,6 +85,16 @@ void SerialManager::escanearPuertos()
         m_puertos = nuevos;
         emit puertosActualizados();
     }
+}
+
+void SerialManager::confirmarConexion()
+{
+    // Solo transicionar si estamos en CONECTANDO
+    if (m_estado != Conectando)
+        return;
+
+    m_timeoutTimer.stop();
+    setEstado(Conectado);
 }
 
 void SerialManager::onDatosDisponibles()
@@ -94,14 +119,22 @@ void SerialManager::onErrorSerial(QSerialPort::SerialPortError error)
 
 void SerialManager::onEscaneoTimer()
 {
-    if (!m_conectado)
+    if (m_estado == Desconectado)
         escanearPuertos();
 }
 
-void SerialManager::setConectado(bool c)
+void SerialManager::onTimeoutConexion()
 {
-    if (m_conectado != c) {
-        m_conectado = c;
-        emit conectadoCambiado();
+    // Pasaron 8 segundos sin recibir paquete válido
+    emit errorConexion("Timeout: no se recibieron datos válidos en "
+                       + QString::number(TIMEOUT_CONEXION_MS / 1000) + " segundos");
+    desconectar();
+}
+
+void SerialManager::setEstado(EstadoConexion nuevoEstado)
+{
+    if (m_estado != nuevoEstado) {
+        m_estado = nuevoEstado;
+        emit estadoConexionCambiado();
     }
 }

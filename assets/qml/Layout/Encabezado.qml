@@ -14,11 +14,14 @@ Rectangle {
     // Señales
     signal cambioPuerto(string puerto)
     signal cambioBaudrate(string baudrate)
-    signal conexionCambiada(bool conectado)
+    signal solicitudConectar()
+    signal solicitudDesconectar()
     signal abrirMenu()
 
-    // Propiedades
-    property bool estaConectado: false
+    // Estado de conexión: 0=Desconectado, 1=Conectando, 2=Conectado
+    property int estadoConexion: 0
+    property bool estaConectado: estadoConexion === 2
+    property bool estaConectando: estadoConexion === 1
     property int segundosTranscurridos: 0
     property string puertoSeleccionado: comboPuerto.currentText
     property string baudrateSeleccionado: comboBaudrate.currentText
@@ -147,8 +150,10 @@ Rectangle {
                 spacing: 8
 
                 IndicadorLED {
-                    activo: root.estaConectado
-                    etiqueta: root.estaConectado ? "CONECTADO" : "DESCONECTADO"
+                    estado: root.estadoConexion
+                    etiqueta: root.estaConectado  ? "CONECTADO"
+                            : root.estaConectando ? "CONECTANDO..."
+                            : "DESCONECTADO"
                 }
             }
         }
@@ -181,10 +186,13 @@ Rectangle {
 
         // Botón conectar/desconectar
         Button {
-            text: root.estaConectado ? "DESCONECTAR" : "CONECTAR"
-            enabled: !root.esNoConectado || root.estaConectado
+            text: root.estaConectado  ? "DESCONECTAR"
+                : root.estaConectando ? "CANCELAR"
+                : "CONECTAR"
+            // Deshabilitado solo si no hay puerto seleccionado y no está activo
+            enabled: (!root.esNoConectado || root.estaConectado || root.estaConectando)
             Layout.preferredHeight: 35
-            Layout.preferredWidth: 90
+            Layout.preferredWidth: 100
 
             contentItem: Text {
                 text: parent.text
@@ -194,16 +202,21 @@ Rectangle {
             }
 
             onClicked: {
-                root.estaConectado = !root.estaConectado
-                root.conexionCambiada(root.estaConectado)
-                if (root.estaConectado) { segundosTranscurridos = 0 }
+                if (root.estadoConexion === 0) {
+                    // DESCONECTADO → solicitar conexión
+                    segundosTranscurridos = 0
+                    root.solicitudConectar()
+                } else {
+                    // CONECTANDO o CONECTADO → desconectar
+                    root.solicitudDesconectar()
+                }
             }
         }
     }
 
-    // Timer de misión
+    // Timer de misión (corre en CONECTANDO y CONECTADO)
     Timer {
-        running: root.estaConectado
+        running: root.estadoConexion > 0
         interval: 1000
         repeat: true
         onTriggered: root.segundosTranscurridos++

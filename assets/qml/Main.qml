@@ -50,31 +50,36 @@ ApplicationWindow {
                 console.log("Baudrate seleccionado:", baudrate)
             }
 
-            onConexionCambiada: function(conectado) {
-                console.log("Conexión:", conectado ? "Conectado" : "Desconectado")
+            onSolicitudConectar: {
+                console.log("Solicitud de conexión")
 
-                if (conectado) {
-                    if (encabezado.esSimulacion) {
-                        simulador.iniciar()
-                    } else {
-                        vistaTelemetria.panelConsola.agregarLog(
-                            "[SERIAL] Conectando a " + encabezado.puertoSeleccionado +
-                            " @ " + encabezado.baudrateSeleccionado + " baud...")
-                        serialManager.conectar(encabezado.puertoSeleccionado,
-                                               parseInt(encabezado.baudrateSeleccionado))
-                    }
-                    csvWriter.iniciarSesion("datos")
+                if (encabezado.esSimulacion) {
+                    simulador.iniciar()
+                    // En simulación, pasar directo a "conectado" (estadoConexion=2)
+                    encabezado.estadoConexion = 2
                 } else {
-                    if (encabezado.esSimulacion) {
-                        simulador.detener()
-                    } else {
-                        vistaTelemetria.panelConsola.agregarLog("[SERIAL] Desconectado")
-                        serialManager.desconectar()
-                    }
-                    csvWriter.finalizarSesion()
-                    telemetry.resetear()
-                    vistaTelemetria.panelConsola.agregarLog("Esperando conexión...")
+                    vistaTelemetria.panelConsola.agregarLog(
+                        "[SERIAL] Conectando a " + encabezado.puertoSeleccionado +
+                        " @ " + encabezado.baudrateSeleccionado + " baud...")
+                    serialManager.conectar(encabezado.puertoSeleccionado,
+                                           parseInt(encabezado.baudrateSeleccionado))
                 }
+                csvWriter.iniciarSesion("datos")
+            }
+
+            onSolicitudDesconectar: {
+                console.log("Solicitud de desconexión")
+
+                if (encabezado.esSimulacion) {
+                    simulador.detener()
+                } else {
+                    serialManager.desconectar()
+                }
+                csvWriter.finalizarSesion()
+                telemetry.resetear()
+                encabezado.estadoConexion = 0
+                vistaTelemetria.panelConsola.agregarLog("[SERIAL] Desconectado")
+                vistaTelemetria.panelConsola.agregarLog("Esperando conexión...")
             }
 
             onAbrirMenu: menuDrawer.open()
@@ -109,14 +114,16 @@ ApplicationWindow {
 
         function onErrorConexion(mensaje) {
             console.log("Error serial:", mensaje)
-            vistaTelemetria.panelConsola.agregarLog(
-                "[ERROR] " + mensaje
-            )
-            encabezado.estaConectado = false
+            vistaTelemetria.panelConsola.agregarLog("[ERROR] " + mensaje)
+            encabezado.estadoConexion = 0
         }
 
-        function onConectadoCambiado() {
-            encabezado.estaConectado = serialManager.conectado
+        function onEstadoConexionCambiado() {
+            // Sincronizar estado del backend → encabezado
+            encabezado.estadoConexion = serialManager.estadoConexion
+            if (serialManager.estadoConexion === 2) {
+                vistaTelemetria.panelConsola.agregarLog("[SERIAL] ¡Conexión confirmada!")
+            }
         }
     }
 }
