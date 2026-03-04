@@ -22,6 +22,8 @@ Rectangle {
     property int segundosTranscurridos: 0
     property string puertoSeleccionado: comboPuerto.currentText
     property string baudrateSeleccionado: comboBaudrate.currentText
+    property bool esSimulacion: comboPuerto.currentText === "SIMULADOR"
+    property bool esNoConectado: comboPuerto.currentText === "No conectado"
     property string tiempoMision: {
         let total = segundosTranscurridos
         let h = Math.floor(total / 3600).toString().padStart(2, '0')
@@ -151,12 +153,20 @@ Rectangle {
             }
         }
 
-        // Selector de puerto (dinámico desde serialManager)
+        // Selector de puerto
         ComboBox {
             id: comboPuerto
-            model: typeof serialManager !== "undefined" ? serialManager.puertosDisponibles : ["COM1"]
+            model: {
+                var puertos = ["No conectado", "SIMULADOR"]
+                if (typeof serialManager !== "undefined") {
+                    var reales = serialManager.puertosDisponibles
+                    for (var i = 0; i < reales.length; i++)
+                        puertos.push(reales[i])
+                }
+                return puertos
+            }
             Layout.preferredHeight: 30
-            Layout.preferredWidth: 100
+            Layout.preferredWidth: 130
             onCurrentTextChanged: root.cambioPuerto(currentText)
         }
 
@@ -172,12 +182,13 @@ Rectangle {
         // Botón conectar/desconectar
         Button {
             text: root.estaConectado ? "DESCONECTAR" : "CONECTAR"
+            enabled: !root.esNoConectado || root.estaConectado
             Layout.preferredHeight: 35
             Layout.preferredWidth: 90
 
             contentItem: Text {
                 text: parent.text
-                color: "black"
+                color: parent.enabled ? "black" : Theme.textoClaro
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }

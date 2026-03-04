@@ -46,11 +46,21 @@ ApplicationWindow {
                 console.log("Conexión:", conectado ? "Conectado" : "Desconectado")
 
                 if (conectado) {
-                    serialManager.conectar(encabezado.puertoSeleccionado,
-                                           parseInt(encabezado.baudrateSeleccionado))
+                    if (encabezado.esSimulacion) {
+                        // Modo simulación: generar datos falsos
+                        simulador.iniciar()
+                    } else {
+                        // Modo real: conectar al puerto serial
+                        serialManager.conectar(encabezado.puertoSeleccionado,
+                                               parseInt(encabezado.baudrateSeleccionado))
+                    }
                     csvWriter.iniciarSesion("datos")
                 } else {
-                    serialManager.desconectar()
+                    if (encabezado.esSimulacion) {
+                        simulador.detener()
+                    } else {
+                        serialManager.desconectar()
+                    }
                     csvWriter.finalizarSesion()
                     telemetry.resetear()
                 }

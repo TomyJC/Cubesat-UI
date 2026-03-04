@@ -10,12 +10,12 @@ TarjetaDeDatos {
     titulo: "BATERÍA / CONECTIVIDAD"
     icono: "🔋"
 
-    // Propiedades de datos (listas para backend)
+    // Propiedades de datos
     property real voltaje: -1
-    property real corriente: -1
-    property real rssi: -1
-    property real cpuLoad: -1
+    property real rssi: 0
+    property real snr: 0
     property real cpuTemp: -1
+    property bool datosDisponibles: false
 
     contenido: RowLayout {
         anchors.fill: parent
@@ -38,19 +38,15 @@ TarjetaDeDatos {
                 font.pixelSize: Theme.fuenteSmall
             }
             Text {
-                text: root.corriente >= 0 ? "Corriente: " + root.corriente.toFixed(2) + " A" : "Corriente: --"
+                text: root.cpuTemp >= 0 ? "CPU Temp: " + root.cpuTemp.toFixed(1) + " °C" : "CPU Temp: --"
                 font.pixelSize: Theme.fuenteSmall
             }
             Text {
-                text: root.rssi >= 0 ? "RSSI: " + root.rssi.toFixed(0) + " dBm" : "RSSI: --"
+                text: root.datosDisponibles ? "RSSI: " + root.rssi.toFixed(0) + " dBm" : "RSSI: --"
                 font.pixelSize: Theme.fuenteSmall
             }
             Text {
-                text: root.cpuLoad >= 0 ? "CPU Load: " + root.cpuLoad.toFixed(0) + "%" : "CPU Load: --"
-                font.pixelSize: Theme.fuenteSmall
-            }
-            Text {
-                text: root.cpuTemp >= 0 ? "CPU Temp: " + root.cpuTemp.toFixed(1) + "°C" : "CPU Temp: --"
+                text: root.datosDisponibles ? "SNR: " + root.snr.toFixed(1) + " dB" : "SNR: --"
                 font.pixelSize: Theme.fuenteSmall
             }
         }

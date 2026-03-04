@@ -22,6 +22,7 @@ qt_add_executable(appTELSTAR_OFFICIAL
     src/MadgwickFilter.h     src/MadgwickFilter.cpp
     src/TelemetryData.h      src/TelemetryData.cpp
     src/CsvWriter.h          src/CsvWriter.cpp
+    src/DataSimulator.h      src/DataSimulator.cpp
 )
 
 qt_add_qml_module(appTELSTAR_OFFICIAL

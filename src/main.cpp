@@ -6,6 +6,7 @@
 #include "PacketParser.h"
 #include "TelemetryData.h"
 #include "CsvWriter.h"
+#include "DataSimulator.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     PacketParser packetParser;
     TelemetryData telemetry;
     CsvWriter csvWriter;
+    DataSimulator simulador;
 
     // Cadena de señales:
     // SerialManager::datosRecibidos → PacketParser::procesarDatos
@@ -34,11 +36,16 @@ int main(int argc, char *argv[])
     QObject::connect(&packetParser, &PacketParser::paqueteValido,
                      &csvWriter, &CsvWriter::escribirPaquete);
 
+    // DataSimulator::paqueteValido → TelemetryData (misma señal que PacketParser)
+    QObject::connect(&simulador, &DataSimulator::paqueteValido,
+                     &telemetry, &TelemetryData::onPaqueteValido);
+
     // Expose to QML
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("serialManager", &serialManager);
     engine.rootContext()->setContextProperty("telemetry", &telemetry);
     engine.rootContext()->setContextProperty("csvWriter", &csvWriter);
+    engine.rootContext()->setContextProperty("simulador", &simulador);
 
     QObject::connect(
         &engine,

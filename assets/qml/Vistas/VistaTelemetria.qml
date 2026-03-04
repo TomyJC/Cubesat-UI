@@ -64,10 +64,10 @@ Item {
                     Layout.fillHeight:    true
                     Layout.preferredHeight: 0.35
                     voltaje:              typeof telemetry !== "undefined" ? telemetry.voltaje : -1
-                    corriente:            typeof telemetry !== "undefined" ? telemetry.corriente : -1
-                    rssi:                 typeof telemetry !== "undefined" ? telemetry.rssi : -1
-                    cpuLoad:              typeof telemetry !== "undefined" ? telemetry.cpuLoad : -1
+                    rssi:                 typeof telemetry !== "undefined" ? telemetry.rssi : 0
+                    snr:                  typeof telemetry !== "undefined" ? telemetry.snr : 0
                     cpuTemp:              typeof telemetry !== "undefined" ? telemetry.cpuTemp : -1
+                    datosDisponibles:     typeof telemetry !== "undefined" ? telemetry.paquetesRecibidos > 0 : false
                 }
             }
 
