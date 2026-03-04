@@ -4,7 +4,7 @@ project(TELSTAR_OFFICIAL VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS Quick QuickControls2 SerialPort)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -15,6 +15,13 @@ set_source_files_properties(assets/qml/Theme.qml
 
 qt_add_executable(appTELSTAR_OFFICIAL
     src/main.cpp
+    src/TelemetryPacket.h
+    src/PacketParser.h       src/PacketParser.cpp
+    src/SerialManager.h      src/SerialManager.cpp
+    src/VDescCalculator.h    src/VDescCalculator.cpp
+    src/MadgwickFilter.h     src/MadgwickFilter.cpp
+    src/TelemetryData.h      src/TelemetryData.cpp
+    src/CsvWriter.h          src/CsvWriter.cpp
 )
 
 qt_add_qml_module(appTELSTAR_OFFICIAL
@@ -59,7 +66,7 @@ set_target_properties(appTELSTAR_OFFICIAL PROPERTIES
 )
 
 target_link_libraries(appTELSTAR_OFFICIAL
-    PRIVATE Qt6::Quick Qt6::QuickControls2
+    PRIVATE Qt6::Quick Qt6::QuickControls2 Qt6::SerialPort
 )
 
 include(GNUInstallDirs)

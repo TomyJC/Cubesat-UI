@@ -20,6 +20,8 @@ Rectangle {
     // Propiedades
     property bool estaConectado: false
     property int segundosTranscurridos: 0
+    property string puertoSeleccionado: comboPuerto.currentText
+    property string baudrateSeleccionado: comboBaudrate.currentText
     property string tiempoMision: {
         let total = segundosTranscurridos
         let h = Math.floor(total / 3600).toString().padStart(2, '0')
@@ -149,10 +151,10 @@ Rectangle {
             }
         }
 
-        // Selector de puerto
+        // Selector de puerto (dinámico desde serialManager)
         ComboBox {
             id: comboPuerto
-            model: ["COM1", "COM2", "COM3", "COM4"]
+            model: typeof serialManager !== "undefined" ? serialManager.puertosDisponibles : ["COM1"]
             Layout.preferredHeight: 30
             Layout.preferredWidth: 100
             onCurrentTextChanged: root.cambioPuerto(currentText)

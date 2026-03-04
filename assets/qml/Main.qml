@@ -13,11 +13,6 @@ ApplicationWindow {
     color: Theme.fondoApp
     title: "TELSTAR — Ground Station"
 
-    // ===== Estado global de la aplicación =====
-    property string estadoMision: "STANDBY"
-    property string estadoParacaidas: "CERRADO"
-    property int paquetesRecibidos: 0
-
     // ===== Menú lateral =====
     MenuDrawer {
         id: menuDrawer
@@ -25,7 +20,6 @@ ApplicationWindow {
 
         onOpcionSeleccionada: function(vista) {
             console.log("Navegar a:", vista)
-            // Futuro: stackView.replace(vistaComponente)
         }
     }
 
@@ -52,52 +46,56 @@ ApplicationWindow {
                 console.log("Conexión:", conectado ? "Conectado" : "Desconectado")
 
                 if (conectado) {
-                    mainWindow.estadoMision = "ASCENSO"
+                    serialManager.conectar(encabezado.puertoSeleccionado,
+                                           parseInt(encabezado.baudrateSeleccionado))
+                    csvWriter.iniciarSesion("datos")
                 } else {
-                    mainWindow.estadoMision = "STANDBY"
-                    mainWindow.estadoParacaidas = "CERRADO"
-                    mainWindow.paquetesRecibidos = 0
+                    serialManager.desconectar()
+                    csvWriter.finalizarSesion()
+                    telemetry.resetear()
                 }
             }
 
             onAbrirMenu: menuDrawer.open()
         }
 
-        // Contenido — Vista de telemetría (futura StackView)
+        // Contenido — Vista de telemetría
         VistaTelemetria {
             id: vistaTelemetria
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            estadoMision: mainWindow.estadoMision
-            estadoParacaidas: mainWindow.estadoParacaidas
-            tiempoMision: encabezado.tiempoMision
-            paquetesRecibidos: mainWindow.paquetesRecibidos
-            estaConectado: encabezado.estaConectado
+            estadoMision: telemetry.estado
+            estadoParacaidas: telemetry.estadoParacaidas
+            tiempoMision: telemetry.tiempoMision
+            paquetesRecibidos: telemetry.paquetesRecibidos
+            estaConectado: serialManager.conectado
             segundosTranscurridos: encabezado.segundosTranscurridos
         }
     }
 
-    // ===== Timer para simular datos en desarrollo =====
-    Timer {
-        interval: 1000
-        running: encabezado.estaConectado
-        repeat: true
+    // ===== Conexiones con el backend =====
+    Connections {
+        target: telemetry
 
-        onTriggered: {
-            mainWindow.paquetesRecibidos++
+        function onLogAgregado(tipo, mensaje) {
+            vistaTelemetria.panelConsola.agregarLog(mensaje)
+        }
+    }
 
-            // Log en consola
+    Connections {
+        target: serialManager
+
+        function onErrorConexion(mensaje) {
+            console.log("Error serial:", mensaje)
             vistaTelemetria.panelConsola.agregarLog(
-                "[" + Qt.formatTime(new Date(), "hh:mm:ss") + "] Paquete #" +
-                mainWindow.paquetesRecibidos + " recibido"
+                "[ERROR] " + mensaje
             )
+            encabezado.estaConectado = false
+        }
 
-            // Transición de estado simulada
-            if (encabezado.segundosTranscurridos > 10 && mainWindow.estadoMision === "ASCENSO") {
-                mainWindow.estadoMision = "DESCENSO"
-                mainWindow.estadoParacaidas = "ABIERTO"
-            }
+        function onConectadoCambiado() {
+            encabezado.estaConectado = serialManager.conectado
         }
     }
 }
