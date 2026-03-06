@@ -8,8 +8,11 @@ import "Layout"
 ApplicationWindow {
     id: mainWindow
     visible: true
-    width: 1600
-    height: 900
+    // Adaptar al tamaño de pantalla disponible
+    width:  Math.min(1600, Screen.desktopAvailableWidth * 0.95)
+    height: Math.min(900, Screen.desktopAvailableHeight * 0.92)
+    minimumWidth:  1024
+    minimumHeight: 600
     color: Theme.fondoApp
     title: "TELSTAR — Ground Station"
 
