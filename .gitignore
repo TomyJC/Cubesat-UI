@@ -81,3 +81,4 @@ CMakeLists.txt.user*
 .uic/
 /build*/
 CLAUDE.md
+.claude/
