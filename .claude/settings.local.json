@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(/c/Qt/Tools/CMake_64/bin/cmake.exe:*)"
-    ]
-  }
-}
