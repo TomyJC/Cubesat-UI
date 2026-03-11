@@ -28,7 +28,8 @@ bool PacketParser::buscarFrame()
     while (m_buffer.size() >= FRAME_SIZE) {
         // Buscar SOF
         int sofIdx = -1;
-        for (int i = 0; i <= m_buffer.size() - FRAME_SIZE; ++i) {
+        // Cast a int para evitar underflow si m_buffer.size() < FRAME_SIZE
+        for (int i = 0; i <= static_cast<int>(m_buffer.size()) - FRAME_SIZE; ++i) {
             if (static_cast<uint8_t>(m_buffer.at(i)) == SOF_BYTE) {
                 sofIdx = i;
                 break;

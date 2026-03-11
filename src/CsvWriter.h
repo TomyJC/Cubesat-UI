@@ -23,7 +23,9 @@ public:
     Q_INVOKABLE void finalizarSesion();
 
 public slots:
-    void escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr);
+    void escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr,
+                         double vDesc, double pitch, double roll, double yaw,
+                         const QString &estadoStr);
 
 signals:
     void grabandoCambiado();

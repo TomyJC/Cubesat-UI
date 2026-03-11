@@ -139,6 +139,11 @@ signals:
     void datosActualizados();
     void logAgregado(const QString &tipo, const QString &mensaje);
 
+    // Señal para CsvWriter: paquete crudo + valores calculados
+    void paqueteParaCsv(TelemetryPacket pkt, int16_t rssi, float snr,
+                        double vDesc, double pitch, double roll, double yaw,
+                        const QString &estadoStr);
+
 private:
     // Último paquete recibido
     TelemetryPacket m_pkt{};

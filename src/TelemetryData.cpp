@@ -70,17 +70,17 @@ bool TelemetryData::altitudDisponible() const { return m_tieneAlDato; }
 
 double TelemetryData::voltaje() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.volt : -1.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.volt : 0.0;
 }
 
 double TelemetryData::rssi() const
 {
-    return m_paquetesRecibidos > 0 ? static_cast<double>(m_rssi) : -1.0;
+    return m_paquetesRecibidos > 0 ? static_cast<double>(m_rssi) : 0.0;
 }
 
 double TelemetryData::cpuTemp() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.cpuT : -1.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.cpuT : 0.0;
 }
 
 double TelemetryData::corriente() const { return -1.0; } // No existe en protocolo
@@ -97,42 +97,42 @@ bool TelemetryData::camaraGrabando() const { return m_pkt.camSt == 2; }
 
 double TelemetryData::tempInterna() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.tempInt : -999.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.tempInt : 0.0;
 }
 
 double TelemetryData::tempExterna() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.tempExt : -999.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.tempExt : 0.0;
 }
 
 double TelemetryData::presion() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.pres : -1.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.pres : 0.0;
 }
 
 double TelemetryData::humedad() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.humExt : -1.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.humExt : 0.0;
 }
 
 double TelemetryData::humedadInterna() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.humInt : -1.0;
+    return m_paquetesRecibidos > 0 ? m_pkt.humInt : 0.0;
 }
 
 int TelemetryData::eco2() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.eco2 : -1;
+    return m_paquetesRecibidos > 0 ? m_pkt.eco2 : 0;
 }
 
 int TelemetryData::tvoc() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.tvoc : -1;
+    return m_paquetesRecibidos > 0 ? m_pkt.tvoc : 0;
 }
 
 int TelemetryData::aqi() const
 {
-    return m_paquetesRecibidos > 0 ? m_pkt.aqi : -1;
+    return m_paquetesRecibidos > 0 ? m_pkt.aqi : 0;
 }
 
 double TelemetryData::magX() const
@@ -226,6 +226,12 @@ void TelemetryData::onPaqueteValido(TelemetryPacket pkt, int16_t rssi, float snr
     m_tieneOrientacion = true;
 
     emit datosActualizados();
+
+    // Emitir paquete con valores calculados para el CSV
+    emit paqueteParaCsv(pkt, rssi, snr,
+                        m_vDesc.disponible() ? m_vDesc.velocidad() : 0.0,
+                        m_pitch, m_roll, m_yaw,
+                        estadoToString(pkt.estado));
 
     // Log para consola
     QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");

@@ -13,6 +13,10 @@ public:
     bool disponible() const;
     void reset();
 
+    // Velocidad máxima razonable para un CanSat (m/s)
+    // Cualquier valor mayor se considera error de sensor GPS
+    static constexpr float VELOCIDAD_MAX = 100.0f;
+
 private:
     float m_velocidad = 0.0f;
     float m_altAnterior = 0.0f;

@@ -49,7 +49,9 @@ void CsvWriter::finalizarSesion()
     emit grabandoCambiado();
 }
 
-void CsvWriter::escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr)
+void CsvWriter::escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr,
+                                double vDesc, double pitch, double roll, double yaw,
+                                const QString &estadoStr)
 {
     if (!m_grabando) return;
 
@@ -91,12 +93,12 @@ void CsvWriter::escribirPaquete(TelemetryPacket pkt, int16_t rssi, float snr)
              << pkt.checksum << ","
              << rssi << ","
              << QString::number(snr, 'f', 2) << ","
-             // Campos calculados (vacíos por ahora, se pueden agregar)
-             << ","  // V_DESC placeholder
-             << ","  // PITCH placeholder
-             << ","  // ROLL placeholder
-             << ","  // YAW placeholder
-             << ","  // ESTADO_STR placeholder
+             // Campos calculados por la estación terrena
+             << QString::number(vDesc, 'f', 2) << ","
+             << QString::number(pitch, 'f', 2) << ","
+             << QString::number(roll, 'f', 2) << ","
+             << QString::number(yaw, 'f', 2) << ","
+             << estadoStr
              << "\n";
 
     m_stream.flush();

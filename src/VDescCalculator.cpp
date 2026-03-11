@@ -1,5 +1,6 @@
 #include "VDescCalculator.h"
 #include <cstdint>
+#include <cmath>
 
 VDescCalculator::VDescCalculator()
 {
@@ -18,8 +19,15 @@ void VDescCalculator::update(float alt, uint32_t tMis)
     if (dt > 0) {
         // V_DESC = (ALT[n] - ALT[n-1]) / (T_MIS[n] - T_MIS[n-1]) × 1000
         // dt está en ms, resultado en m/s
-        m_velocidad = (alt - m_altAnterior) / static_cast<float>(dt) * 1000.0f;
-        m_disponible = true;
+        float v = (alt - m_altAnterior) / static_cast<float>(dt) * 1000.0f;
+
+        // Ignorar valores absurdos causados por error de GPS
+        // Un CanSat (subido con dron) nunca supera 100 m/s
+        if (std::fabs(v) <= VELOCIDAD_MAX) {
+            m_velocidad = v;
+            m_disponible = true;
+        }
+        // Si supera el límite, mantenemos el último valor válido
     }
 
     m_altAnterior = alt;

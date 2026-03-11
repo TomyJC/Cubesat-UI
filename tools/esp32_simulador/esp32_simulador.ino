@@ -292,19 +292,6 @@ void setup() {
     randomSeed(analogRead(0));
 
     tMisInicio = millis();
-
-    // Mensaje de inicio (esto no afecta la recepción porque la estación
-    // terrena busca el byte SOF 0xAA para sincronizar)
-    Serial.println();
-    Serial.println("=== TELSTAR ESP32 Simulador ===");
-    Serial.println("Enviando frames de 105 bytes a 3 Hz");
-    Serial.print("Baudrate: ");
-    Serial.println(BAUDRATE);
-    Serial.println("Iniciando en 2 segundos...");
-    Serial.println();
-
-    delay(2000);
-    tMisInicio = millis();  // Reiniciar tiempo de misión después del delay
 }
 
 // =========================================================================

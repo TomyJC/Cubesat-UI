@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
     QObject::connect(&packetParser, &PacketParser::paqueteInvalido,
                      &telemetry, &TelemetryData::onPaqueteInvalido);
 
-    // PacketParser::paqueteValido → CsvWriter::escribirPaquete
-    QObject::connect(&packetParser, &PacketParser::paqueteValido,
+    // TelemetryData::paqueteParaCsv → CsvWriter::escribirPaquete
+    // (pasa por TelemetryData para incluir valores calculados: V_DESC, pitch, roll, yaw)
+    QObject::connect(&telemetry, &TelemetryData::paqueteParaCsv,
                      &csvWriter, &CsvWriter::escribirPaquete);
 
     // PacketParser::paqueteValido → SerialManager::confirmarConexion
