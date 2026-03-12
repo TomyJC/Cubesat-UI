@@ -83,8 +83,7 @@ double TelemetryData::cpuTemp() const
     return m_paquetesRecibidos > 0 ? m_pkt.cpuT : 0.0;
 }
 
-double TelemetryData::corriente() const { return -1.0; } // No existe en protocolo
-double TelemetryData::cpuLoad() const { return -1.0; }   // No existe en protocolo
+
 
 // ── Getters: PanelGeolocalizacion ───────────────────────
 

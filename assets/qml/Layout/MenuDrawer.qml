@@ -12,7 +12,7 @@ Drawer {
 
     Rectangle {
         anchors.fill: parent
-        color: Theme.fondoApp
+        color: Theme.fondoOscuro
 
         ColumnLayout {
             anchors.fill: parent
@@ -23,7 +23,18 @@ Drawer {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 80
-                color: Theme.acento
+                gradient: Gradient {
+                    GradientStop { position: 0.0; color: "#0d2137" }
+                    GradientStop { position: 1.0; color: "#0a1628" }
+                }
+
+                // Línea inferior cyan
+                Rectangle {
+                    anchors.bottom: parent.bottom
+                    width: parent.width
+                    height: 1
+                    color: Qt.rgba(0, 0.898, 1, 0.3)
+                }
 
                 ColumnLayout {
                     anchors.centerIn: parent
@@ -33,14 +44,15 @@ Drawer {
                         text: "TELSTAR 📡"
                         font.pixelSize: 20
                         font.bold: true
-                        color: Theme.textoBlanco
+                        color: Theme.textoCyan
                         Layout.alignment: Qt.AlignHCenter
                     }
 
                     Text {
                         text: "GROUND STATION"
                         font.pixelSize: 11
-                        color: Theme.textoBlanco
+                        color: Theme.textoMedio
+                        font.letterSpacing: 2
                         Layout.alignment: Qt.AlignHCenter
                     }
                 }
@@ -59,7 +71,7 @@ Drawer {
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 50
-                color: Theme.hoverGris
+                color: Qt.rgba(0, 0, 0, 0.3)
 
                 Text {
                     anchors.centerIn: parent

@@ -86,7 +86,6 @@ TarjetaDeDatos {
         }
 
         // ── Tabla de datos ───────────────────────
-        // 2 columnas: [label izq | valor der]
         GridLayout {
             Layout.fillWidth: true
             columns: 2
@@ -98,7 +97,8 @@ TarjetaDeDatos {
             Text {
                 text: root.estadoParacaidas
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
-                color: root.estadoParacaidas === "ABIERTO" ? Theme.exito : Theme.textoOscuro
+                font.family: Theme.fuenteMono
+                color: root.estadoParacaidas === "ABIERTO" ? Theme.exito : Theme.textoMedio
                 Layout.alignment: Qt.AlignRight
             }
 
@@ -108,6 +108,7 @@ TarjetaDeDatos {
                 text: root.servo + "°"
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
                 font.family: Theme.fuenteMono
+                color: Theme.textoValor
                 Layout.alignment: Qt.AlignRight
             }
 
@@ -117,6 +118,7 @@ TarjetaDeDatos {
                 text: root.tiempoMision
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
                 font.family: Theme.fuenteMono
+                color: Theme.textoCyan
                 Layout.alignment: Qt.AlignRight
             }
 
@@ -125,6 +127,7 @@ TarjetaDeDatos {
             Text {
                 text: root.paquetesRecibidos.toString()
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
+                font.family: Theme.fuenteMono
                 color: root.paquetesRecibidos > 0 ? Theme.exito : Theme.textoClaro
                 Layout.alignment: Qt.AlignRight
             }
@@ -134,6 +137,8 @@ TarjetaDeDatos {
             Text {
                 text: root.gpsFix
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
+                font.family: Theme.fuenteMono
+                color: Theme.textoValor
                 Layout.alignment: Qt.AlignRight
             }
 
@@ -142,6 +147,7 @@ TarjetaDeDatos {
             Text {
                 text: root.ens160Estado
                 font.pixelSize: Theme.fuenteSmall; font.bold: true
+                font.family: Theme.fuenteMono
                 color: root.ens160Estado === "LISTO" ? Theme.exito : Theme.textoClaro
                 Layout.alignment: Qt.AlignRight
             }
@@ -169,10 +175,10 @@ TarjetaDeDatos {
                 Text {
                     text: root.camaraEstado
                     font.pixelSize: Theme.fuenteSmall; font.bold: true
+                    font.family: Theme.fuenteMono
                     color: root.camaraEstado === "GRABANDO" ? Theme.exito : Theme.textoClaro
                 }
             }
-
         }
 
         // ── Separador ───────────────────────────
@@ -180,36 +186,13 @@ TarjetaDeDatos {
             Layout.fillWidth: true
             height: 1
             color: Theme.bordeSeparador
-            opacity: 0.6
         }
 
         // ── Altitud relativa ─────────────────────
-
         ColumnLayout {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
             spacing: 4
-
-            // ── Valor de altitud ─────────────────
-            RowLayout {
-                Layout.alignment: Qt.AlignHCenter
-                spacing: 4
-
-                Text {
-                    text: root.altitudDisponible ? root.altitud.toFixed(1) : "--"
-                    font.pixelSize: 28
-                    font.bold: true
-                    font.family: Theme.fuenteMono
-                    color: Theme.textoOscuro
-                }
-
-                Text {
-                    text: "m"
-                    font.pixelSize: Theme.fuenteH3
-                    color: Theme.acento
-                    Layout.alignment: Qt.AlignBottom
-                }
-            }
 
             // ── Etiqueta ─────────────────────────
             Text {
@@ -221,18 +204,43 @@ TarjetaDeDatos {
                 Layout.alignment: Qt.AlignHCenter
             }
 
+            // ── Valor de altitud ─────────────────
+            RowLayout {
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 4
+
+                Text {
+                    text: root.altitudDisponible ? root.altitud.toFixed(1) : "--"
+                    font.pixelSize: 28
+                    font.bold: true
+                    font.family: Theme.fuenteMono
+                    color: Theme.textoCyan
+                }
+
+                Text {
+                    text: "m"
+                    font.pixelSize: Theme.fuenteH3
+                    color: Theme.textoMedio
+                    Layout.alignment: Qt.AlignBottom
+                }
+            }
+
             // ── Barra de progreso ───────────────
             Rectangle {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 6
                 radius: 3
-                color: Theme.bordeSeparador
+                color: Qt.rgba(0, 0.898, 1, 0.1)
 
                 Rectangle {
                     width: parent.width * root._porcentaje
                     height: parent.height
                     radius: 3
-                    color: Theme.acento
+                    gradient: Gradient {
+                        orientation: Gradient.Horizontal
+                        GradientStop { position: 0.0; color: Theme.acento }
+                        GradientStop { position: 1.0; color: Theme.acentoAzul }
+                    }
 
                     Behavior on width {
                         NumberAnimation {
@@ -243,6 +251,5 @@ TarjetaDeDatos {
                 }
             }
         }
-
     }
 }

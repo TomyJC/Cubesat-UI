@@ -20,26 +20,46 @@ TarjetaDeDatos {
         anchors.fill: parent
         spacing: Theme.espaciadoPequeno
 
-        // Datos numéricos
+        // Datos numéricos con colores por eje
         RowLayout {
             Layout.fillWidth: true
-            spacing: Theme.margen
+            spacing: 16
             visible: root.datosDisponibles
 
-            Text {
-                text: "X: " + root.accelX.toFixed(2)
-                font.pixelSize: Theme.fuenteSmall
-                font.family: Theme.fuenteMono
+            // X
+            RowLayout {
+                spacing: 3
+                Text { text: "X:"; font.pixelSize: Theme.fuenteSmall; font.bold: true; color: Theme.ejeX }
+                Text {
+                    text: root.accelX.toFixed(2)
+                    font.pixelSize: Theme.fuenteSmall; font.family: Theme.fuenteMono; font.bold: true
+                    color: Theme.textoValor
+                }
+                Text { text: "g"; font.pixelSize: Theme.fuenteCaption; color: Theme.textoClaro }
             }
-            Text {
-                text: "Y: " + root.accelY.toFixed(2)
-                font.pixelSize: Theme.fuenteSmall
-                font.family: Theme.fuenteMono
+
+            // Y
+            RowLayout {
+                spacing: 3
+                Text { text: "Y:"; font.pixelSize: Theme.fuenteSmall; font.bold: true; color: Theme.ejeY }
+                Text {
+                    text: root.accelY.toFixed(2)
+                    font.pixelSize: Theme.fuenteSmall; font.family: Theme.fuenteMono; font.bold: true
+                    color: Theme.textoValor
+                }
+                Text { text: "g"; font.pixelSize: Theme.fuenteCaption; color: Theme.textoClaro }
             }
-            Text {
-                text: "Z: " + root.accelZ.toFixed(2)
-                font.pixelSize: Theme.fuenteSmall
-                font.family: Theme.fuenteMono
+
+            // Z
+            RowLayout {
+                spacing: 3
+                Text { text: "Z:"; font.pixelSize: Theme.fuenteSmall; font.bold: true; color: Theme.ejeZ }
+                Text {
+                    text: root.accelZ.toFixed(2)
+                    font.pixelSize: Theme.fuenteSmall; font.family: Theme.fuenteMono; font.bold: true
+                    color: Theme.textoValor
+                }
+                Text { text: "g"; font.pixelSize: Theme.fuenteCaption; color: Theme.textoClaro }
             }
         }
 
@@ -47,7 +67,6 @@ TarjetaDeDatos {
             Layout.fillWidth: true
             Layout.fillHeight: true
             texto: "GRÁFICA DE ACELERÓMETRO\n(X, Y, Z)"
-            radius: 20
         }
     }
 }

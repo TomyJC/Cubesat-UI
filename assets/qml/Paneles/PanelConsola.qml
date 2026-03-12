@@ -23,8 +23,9 @@ TarjetaDeDatos {
     contenido: Rectangle {
         anchors.fill: parent
         color: Theme.fondoConsola
-        border.color: Theme.textoClaro
-        radius: Theme.radioGrande
+        border.color: Qt.rgba(0, 0.898, 1, 0.12)
+        border.width: 1
+        radius: Theme.radioPequeno
 
         Flickable {
             id: consolaFlick

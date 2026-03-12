@@ -26,10 +26,11 @@ TarjetaDeDatos {
 
             Text {
                 text: root.datosDisponibles
-                      ? "Lat: " + root.latitud.toFixed(6) + "  Lon: " + root.longitud.toFixed(6)
-                      : "Lat: --  Lon: --"
+                      ? "LAT " + root.latitud.toFixed(6) + "   LON " + root.longitud.toFixed(6)
+                      : "LAT --          LON --"
                 font.pixelSize: Theme.fuenteSmall
                 font.family: Theme.fuenteMono
+                color: root.datosDisponibles ? Theme.textoCyan : Theme.textoClaro
                 Layout.fillWidth: true
             }
 
@@ -40,19 +41,14 @@ TarjetaDeDatos {
                 width: recRow.implicitWidth + 16
                 height: 24
                 radius: 12
-                color: "white"
-                border.color: "black"
+                color: Qt.rgba(1, 0.278, 0.341, 0.15)
+                border.color: Qt.rgba(1, 0.278, 0.341, 0.4)
                 border.width: 1
 
                 RowLayout {
                     id: recRow
                     anchors.centerIn: parent
                     spacing: 5
-
-                    Text {
-                        text: "🎥"
-                        font.pixelSize: 12
-                    }
 
                     Rectangle {
                         width: 8; height: 8; radius: 4

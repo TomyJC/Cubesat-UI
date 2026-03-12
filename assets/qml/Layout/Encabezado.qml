@@ -7,9 +7,22 @@ Rectangle {
     id: root
     width: 1600
     height: Theme.alturaEncabezado
-    color: Theme.fondoTarjeta
-    border.color: "black"
-    border.width: Theme.bordeAncho
+    color: Theme.fondoEncabezado
+    border.color: "transparent"
+    border.width: 0
+
+    // Línea inferior cyan
+    Rectangle {
+        anchors.bottom: parent.bottom
+        width: parent.width
+        height: 1
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0.0; color: Theme.acento }
+            GradientStop { position: 0.5; color: Qt.rgba(0, 0.898, 1, 0.3) }
+            GradientStop { position: 1.0; color: "transparent" }
+        }
+    }
 
     // Señales
     signal cambioPuerto(string puerto)
@@ -46,18 +59,18 @@ Rectangle {
             id: menuButton
             width: 40
             height: 40
-            border.color: "black"
-            border.width: Theme.bordeAncho
+            border.color: Theme.bordeOscuro
+            border.width: 1
             radius: width / 2
             Layout.alignment: Qt.AlignVCenter
-            color: menuMouseArea.pressed ? Theme.hoverGris : Theme.fondoTarjeta
+            color: menuMouseArea.pressed ? Theme.hoverGris : "transparent"
 
             Column {
                 anchors.centerIn: parent
                 spacing: 3
-                Rectangle { width: 18; height: 2; color: "black" }
-                Rectangle { width: 18; height: 2; color: "black" }
-                Rectangle { width: 18; height: 2; color: "black" }
+                Rectangle { width: 18; height: 2; color: Theme.textoMedio }
+                Rectangle { width: 18; height: 2; color: Theme.textoMedio }
+                Rectangle { width: 18; height: 2; color: Theme.textoMedio }
             }
 
             MouseArea {
@@ -76,22 +89,26 @@ Rectangle {
                 text: "TELSTAR"
                 font.pixelSize: Theme.fuenteH1
                 font.bold: true
-                color: "black"
+                color: Theme.textoCyan
+                font.letterSpacing: 2
             }
 
             RowLayout {
                 spacing: 6
 
                 Text {
-                    text: "v1.0"
+                    text: "v2.0"
                     font.pixelSize: Theme.fuenteBody
                     color: Theme.textoMedio
                 }
 
                 Rectangle {
                     width: 42; height: 18
-                    color: Theme.exito
                     radius: 9
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: "#00c853" }
+                        GradientStop { position: 1.0; color: "#00a844" }
+                    }
                     Text {
                         anchors.centerIn: parent
                         text: "PUCP"
@@ -119,8 +136,8 @@ Rectangle {
         Text {
             text: "GROUND STATION"
             font.pixelSize: Theme.fuenteH2
-            font.letterSpacing: 2
-            color: Theme.textoOscuro
+            font.letterSpacing: 4
+            color: Theme.textoMedio
             font.bold: true
         }
 
@@ -132,16 +149,16 @@ Rectangle {
             text: root.tiempoMision
             font.family: Theme.fuenteMono
             font.pixelSize: 16
-            color: "black"
+            color: Theme.textoCyan
         }
 
         // Indicador de conexión
         Rectangle {
             Layout.preferredHeight: 30
             Layout.preferredWidth: indicadorRow.implicitWidth + 20
-            color: Theme.fondoTarjeta
-            border.color: Theme.bordeSuave
-            border.width: Theme.bordeAnchoPequeno
+            color: "transparent"
+            border.color: Theme.bordeOscuro
+            border.width: 1
             radius: Theme.radioPequeno
 
             RowLayout {
@@ -173,6 +190,20 @@ Rectangle {
             Layout.preferredHeight: 30
             Layout.preferredWidth: 130
             onCurrentTextChanged: root.cambioPuerto(currentText)
+
+            background: Rectangle {
+                color: Theme.fondoInput
+                border.color: Theme.bordeOscuro
+                border.width: 1
+                radius: Theme.radioPequeno
+            }
+            contentItem: Text {
+                text: comboPuerto.displayText
+                color: Theme.textoOscuro
+                font.pixelSize: Theme.fuenteBody
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: 8
+            }
         }
 
         // Selector de baudrate
@@ -182,32 +213,62 @@ Rectangle {
             Layout.preferredHeight: 30
             Layout.preferredWidth: 100
             onCurrentTextChanged: root.cambioBaudrate(currentText)
+
+            background: Rectangle {
+                color: Theme.fondoInput
+                border.color: Theme.bordeOscuro
+                border.width: 1
+                radius: Theme.radioPequeno
+            }
+            contentItem: Text {
+                text: comboBaudrate.displayText
+                color: Theme.textoOscuro
+                font.pixelSize: Theme.fuenteBody
+                verticalAlignment: Text.AlignVCenter
+                leftPadding: 8
+            }
         }
 
         // Botón conectar/desconectar
         Button {
+            id: btnConectar
             text: root.estaConectado  ? "DESCONECTAR"
                 : root.estaConectando ? "CANCELAR"
                 : "CONECTAR"
-            // Deshabilitado solo si no hay puerto seleccionado y no está activo
             enabled: (!root.esNoConectado || root.estaConectado || root.estaConectando)
             Layout.preferredHeight: 35
-            Layout.preferredWidth: 100
+            Layout.preferredWidth: 120
 
             contentItem: Text {
                 text: parent.text
-                color: parent.enabled ? "black" : Theme.textoClaro
+                color: parent.enabled ? Theme.textoBlanco : Theme.textoClaro
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                font.pixelSize: Theme.fuenteSmall
+                font.bold: true
+                font.letterSpacing: 1
+            }
+
+            background: Rectangle {
+                color: {
+                    if (!btnConectar.enabled) return Theme.fondoInput
+                    if (root.estaConectado || root.estaConectando) return Qt.rgba(1, 0.278, 0.341, 0.2)
+                    return Qt.rgba(0, 0.898, 1, 0.15)
+                }
+                border.color: {
+                    if (!btnConectar.enabled) return Theme.bordeOscuro
+                    if (root.estaConectado || root.estaConectando) return Theme.error
+                    return Theme.acento
+                }
+                border.width: 1
+                radius: Theme.radioPequeno
             }
 
             onClicked: {
                 if (root.estadoConexion === 0) {
-                    // DESCONECTADO → solicitar conexión
                     segundosTranscurridos = 0
                     root.solicitudConectar()
                 } else {
-                    // CONECTANDO o CONECTADO → desconectar
                     root.solicitudDesconectar()
                 }
             }

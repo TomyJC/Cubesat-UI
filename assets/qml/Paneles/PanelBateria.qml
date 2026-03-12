@@ -17,6 +17,13 @@ TarjetaDeDatos {
     property real cpuTemp: -1
     property bool datosDisponibles: false
 
+    // Color de calidad de señal según RSSI
+    function colorRssi(val) {
+        if (val > -60) return Theme.exito
+        if (val > -80) return Theme.advertencia
+        return Theme.error
+    }
+
     contenido: RowLayout {
         anchors.fill: parent
         spacing: Theme.margen
@@ -28,26 +35,123 @@ TarjetaDeDatos {
             texto: "GRÁFICA\nBARRA\nBATERÍA"
         }
 
-        // Datos numéricos
-        ColumnLayout {
+        // Datos numéricos en grid 2x2
+        GridLayout {
             Layout.fillWidth: true
-            spacing: 3
+            Layout.fillHeight: true
+            columns: 2
+            rowSpacing: 6
+            columnSpacing: 12
 
-            Text {
-                text: root.voltaje >= 0 ? "Voltaje: " + root.voltaje.toFixed(2) + " V" : "Voltaje: --"
-                font.pixelSize: Theme.fuenteSmall
+            // ── Voltaje ──
+            ColumnLayout {
+                spacing: 1
+                Text {
+                    text: "VOLTAJE"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.textoClaro
+                }
+                RowLayout {
+                    spacing: 3
+                    Text {
+                        text: root.voltaje >= 0 ? root.voltaje.toFixed(2) : "--"
+                        font.pixelSize: Theme.fuenteH2
+                        font.bold: true
+                        font.family: Theme.fuenteMono
+                        color: root.voltaje >= 3.5 ? Theme.exito
+                             : root.voltaje >= 3.2 ? Theme.advertencia
+                             : root.voltaje >= 0   ? Theme.error
+                             : Theme.textoMedio
+                    }
+                    Text {
+                        text: "V"
+                        font.pixelSize: Theme.fuenteSmall
+                        color: Theme.textoClaro
+                        Layout.alignment: Qt.AlignBottom
+                    }
+                }
             }
-            Text {
-                text: root.cpuTemp >= 0 ? "CPU Temp: " + root.cpuTemp.toFixed(1) + " °C" : "CPU Temp: --"
-                font.pixelSize: Theme.fuenteSmall
+
+            // ── CPU Temp ──
+            ColumnLayout {
+                spacing: 1
+                Text {
+                    text: "CPU TEMP"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.textoClaro
+                }
+                RowLayout {
+                    spacing: 3
+                    Text {
+                        text: root.cpuTemp >= 0 ? root.cpuTemp.toFixed(1) : "--"
+                        font.pixelSize: Theme.fuenteH2
+                        font.bold: true
+                        font.family: Theme.fuenteMono
+                        color: Theme.textoValor
+                    }
+                    Text {
+                        text: "°C"
+                        font.pixelSize: Theme.fuenteSmall
+                        color: Theme.textoClaro
+                        Layout.alignment: Qt.AlignBottom
+                    }
+                }
             }
-            Text {
-                text: root.datosDisponibles ? "RSSI: " + root.rssi.toFixed(0) + " dBm" : "RSSI: --"
-                font.pixelSize: Theme.fuenteSmall
+
+            // ── RSSI ──
+            ColumnLayout {
+                spacing: 1
+                Text {
+                    text: "RSSI"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.textoClaro
+                }
+                RowLayout {
+                    spacing: 3
+                    Text {
+                        text: root.datosDisponibles ? root.rssi.toFixed(0) : "--"
+                        font.pixelSize: Theme.fuenteH2
+                        font.bold: true
+                        font.family: Theme.fuenteMono
+                        color: root.datosDisponibles ? colorRssi(root.rssi) : Theme.textoMedio
+                    }
+                    Text {
+                        text: "dBm"
+                        font.pixelSize: Theme.fuenteSmall
+                        color: Theme.textoClaro
+                        Layout.alignment: Qt.AlignBottom
+                    }
+                }
             }
-            Text {
-                text: root.datosDisponibles ? "SNR: " + root.snr.toFixed(1) + " dB" : "SNR: --"
-                font.pixelSize: Theme.fuenteSmall
+
+            // ── SNR ──
+            ColumnLayout {
+                spacing: 1
+                Text {
+                    text: "SNR"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.textoClaro
+                }
+                RowLayout {
+                    spacing: 3
+                    Text {
+                        text: root.datosDisponibles ? root.snr.toFixed(1) : "--"
+                        font.pixelSize: Theme.fuenteH2
+                        font.bold: true
+                        font.family: Theme.fuenteMono
+                        color: Theme.textoCyan
+                    }
+                    Text {
+                        text: "dB"
+                        font.pixelSize: Theme.fuenteSmall
+                        color: Theme.textoClaro
+                        Layout.alignment: Qt.AlignBottom
+                    }
+                }
             }
         }
     }

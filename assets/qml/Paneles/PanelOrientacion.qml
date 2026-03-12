@@ -30,45 +30,137 @@ TarjetaDeDatos {
             texto: "CUBO 3D\nORIENTACIÓN"
         }
 
-        // Datos de orientación
-        ColumnLayout {
+        // Datos de orientación — valores grandes por eje
+        RowLayout {
             Layout.fillWidth: true
-            spacing: Theme.espaciadoPequeno
+            spacing: 12
 
-            Text {
-                text: root.datosDisponibles
-                      ? "Pitch: " + root.pitch.toFixed(1) + "°  Roll: " + root.roll.toFixed(1) + "°  Yaw: " + root.yaw.toFixed(1) + "°"
-                      : "Pitch: --   Roll: --   Yaw: --"
-                font.pixelSize: Theme.fuenteSmall
-                font.family: Theme.fuenteMono
+            // Pitch
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 1
+                Text {
+                    text: "PITCH"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.ejeX
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                Text {
+                    text: root.datosDisponibles ? root.pitch.toFixed(1) + "°" : "--"
+                    font.pixelSize: Theme.fuenteH3
+                    font.bold: true
+                    font.family: Theme.fuenteMono
+                    color: Theme.textoValor
+                    Layout.alignment: Qt.AlignHCenter
+                }
             }
 
-            RowLayout {
-                spacing: Theme.espaciado
-
+            // Roll
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 1
                 Text {
-                    text: "Estado: " + (root.datosDisponibles
-                          ? (root.esEstable ? "Estable" : "Inestable")
-                          : "--")
-                    font.pixelSize: Theme.fuenteSmall
+                    text: "ROLL"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.ejeY
+                    Layout.alignment: Qt.AlignHCenter
                 }
+                Text {
+                    text: root.datosDisponibles ? root.roll.toFixed(1) + "°" : "--"
+                    font.pixelSize: Theme.fuenteH3
+                    font.bold: true
+                    font.family: Theme.fuenteMono
+                    color: Theme.textoValor
+                    Layout.alignment: Qt.AlignHCenter
+                }
+            }
+
+            // Yaw
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 1
+                Text {
+                    text: "YAW"
+                    font.pixelSize: Theme.fuenteCaption
+                    font.letterSpacing: 1
+                    color: Theme.ejeZ
+                    Layout.alignment: Qt.AlignHCenter
+                }
+                Text {
+                    text: root.datosDisponibles ? root.yaw.toFixed(1) + "°" : "--"
+                    font.pixelSize: Theme.fuenteH3
+                    font.bold: true
+                    font.family: Theme.fuenteMono
+                    color: Theme.textoValor
+                    Layout.alignment: Qt.AlignHCenter
+                }
+            }
+        }
+
+        // Estado + Velocidad Angular
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: Theme.espaciado
+
+            // Estado de estabilidad
+            RowLayout {
+                spacing: 6
 
                 Rectangle {
-                    width: 12
-                    height: 12
-                    radius: 6
+                    width: 10; height: 10; radius: 5
                     color: root.datosDisponibles
                            ? (root.esEstable ? Theme.exito : Theme.error)
                            : Theme.neutro
+
+                    // Glow
+                    Rectangle {
+                        anchors.centerIn: parent
+                        width: 18; height: 18; radius: 9
+                        color: parent.color
+                        opacity: 0.2
+                        visible: root.datosDisponibles
+                    }
+                }
+
+                Text {
+                    text: root.datosDisponibles
+                          ? (root.esEstable ? "ESTABLE" : "INESTABLE")
+                          : "--"
+                    font.pixelSize: Theme.fuenteSmall
+                    font.bold: true
+                    font.letterSpacing: 1
+                    color: root.datosDisponibles
+                           ? (root.esEstable ? Theme.exito : Theme.error)
+                           : Theme.textoClaro
                 }
             }
 
-            Text {
-                text: root.datosDisponibles
-                      ? "Vel. Angular: " + root.velocidadAngular.toFixed(1) + " °/s"
-                      : "Vel. Angular: --"
-                font.pixelSize: Theme.fuenteSmall
-                font.family: Theme.fuenteMono
+            Item { Layout.fillWidth: true }
+
+            // Velocidad angular
+            RowLayout {
+                spacing: 3
+                Text {
+                    text: "ω:"
+                    font.pixelSize: Theme.fuenteSmall
+                    color: Theme.textoClaro
+                }
+                Text {
+                    text: root.datosDisponibles
+                          ? root.velocidadAngular.toFixed(1)
+                          : "--"
+                    font.pixelSize: Theme.fuenteSmall
+                    font.bold: true
+                    font.family: Theme.fuenteMono
+                    color: Theme.textoCyan
+                }
+                Text {
+                    text: "°/s"
+                    font.pixelSize: Theme.fuenteSmall
+                    color: Theme.textoClaro
+                }
             }
         }
     }

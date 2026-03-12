@@ -28,8 +28,7 @@ class TelemetryData : public QObject
     Q_PROPERTY(double voltaje READ voltaje NOTIFY datosActualizados)
     Q_PROPERTY(double rssi READ rssi NOTIFY datosActualizados)
     Q_PROPERTY(double cpuTemp READ cpuTemp NOTIFY datosActualizados)
-    Q_PROPERTY(double corriente READ corriente NOTIFY datosActualizados)
-    Q_PROPERTY(double cpuLoad READ cpuLoad NOTIFY datosActualizados)
+
 
     // --- PanelGeolocalizacion ---
     Q_PROPERTY(double latitud READ latitud NOTIFY datosActualizados)
@@ -91,8 +90,7 @@ public:
     double voltaje() const;
     double rssi() const;
     double cpuTemp() const;
-    double corriente() const;
-    double cpuLoad() const;
+
 
     double latitud() const;
     double longitud() const;
